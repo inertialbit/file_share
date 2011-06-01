@@ -6,14 +6,14 @@ require 'rake'
 
 FileShare::Application.load_tasks
 
-excluded_files = %w(config/database.yml public/files)
+excluded_files = %w(config/database.yml public/files Gemfile.lock)
 
 Jeweler::Tasks.new do |gem|
   gem.name = "file_share"
   gem.summary = %Q{Provides basic file management features.}
-  gem.description = %Q{Simple versioned event management for Rails 3.}
+  gem.description = %Q{Basic file management on Rails 3.}
   gem.email = ["jason.lapier@gmail.com", "jeremiah@inertialbit.net"]
-  gem.homepage = "http://github.com/inertialbit/file_share"
+  gem.homepage = "https://github.com/TACSUO/file_share"
   gem.authors = ["Jason LaPier", "Jeremiah Heller"]
   gem.require_path = 'lib'
   gem.files =  FileList[
