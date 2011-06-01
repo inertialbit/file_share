@@ -50,7 +50,7 @@ class FileAttachmentsController < FileShare::ApplicationController
     end
   
     def create
-      if params[:file]
+      if params[:file] # plupload param
         file_params = {
           :uploaded_file => params[:file]
         }
@@ -62,6 +62,7 @@ class FileAttachmentsController < FileShare::ApplicationController
         end
         @file_attachment = FileAttachment.new file_params
       elsif params[:file_attachment] && params[:file_attachment][:uploaded_file]
+        # std form params
         @file_attachment = FileAttachment.new params[:file_attachment]
       end
       
