@@ -24,17 +24,3 @@
 .pagination {
 }
 */
-form.file_attachment .error.small_text {
-  padding: 0.2em;
-  margin-top: 0;
-}
-div.notice p, div.error p {
-  margin: 0;
-}
-div.file_attachment p.name, div.file_attachment p.name a {
-  font-weight: bold;
-  margin: 0 0 0.5em 0;
-}
-div.file_attachment p.description {
-  margin: 0 0 1.5em 0.5em;
-}

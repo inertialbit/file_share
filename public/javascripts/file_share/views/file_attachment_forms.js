@@ -55,7 +55,8 @@ FileShare.Views.FileAttachmentEditForm = Backbone.View.extend({
   close: function(cancelEvent) {
     window.location.hash = '#';
     
-    $(this.el).replaceWith(this.model.view.render().el); // < that's pretty neat
+    $(this.el).remove();
+    $('#file_attachment_'+this.model.get('id')).show();
   },
   render: function() {
     if( this.model ) {

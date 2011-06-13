@@ -8,7 +8,7 @@
 class FileAttachment < ActiveRecord::Base
   set_table_name "file_share_file_attachments"
   
-  attr_accessible :name, :description, :uploaded_file, :attachable_id, :attachable_type, :file_container
+  attr_accessible :name, :description, :uploaded_file, :file_container
   
   REL_ROOT_DIR = File.join 'public', 'files'
   ABS_ROOT_DIR = File.join Rails.root, REL_ROOT_DIR
@@ -29,6 +29,7 @@ class FileAttachment < ActiveRecord::Base
   before_destroy :move_file_to_trash_folder!
 
   attr_accessor :uploaded_file
+  attr_reader :file_container
   
   scope :orphans, where('attachable_id IS NULL')
   scope :attached, where('attachable_id IS NOT NULL')
@@ -94,6 +95,16 @@ class FileAttachment < ActiveRecord::Base
     end
   protected
   public
+    def bb_attributes
+      if attachable
+        return attributes.merge({
+          :attachable_name => attachable.name,
+          :file_container => file_container
+        })
+      else
+        return attributes
+      end
+    end
     def full_path
       # for backward compat; previous releases stored filepath relative to 'public'.
       # ie 'public' was not included in the filepath
@@ -109,7 +120,7 @@ class FileAttachment < ActiveRecord::Base
     end
     def file_container
       return nil unless attachable_type.present? && attachable_id.present?
-      "#{attachable_type}_#{attachable_id}"
+      @file_container ||= "#{attachable_type}_#{attachable_id}"
     end
     def file_container=(container)
       p = container.split("_")

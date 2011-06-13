@@ -14,8 +14,7 @@ module FileContainer
   end
 
   def self.all
-    #@all ||= types.map{|t| t.where(1)} # lazy load :all of each type
-    [{:name => "Test"}]
+    @all ||= types.map{|t| t.where(1)} # lazy load :all of each type
   end
 
   module Associations

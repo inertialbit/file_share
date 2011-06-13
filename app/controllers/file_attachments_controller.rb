@@ -101,7 +101,7 @@ class FileAttachmentsController < FileShare::ApplicationController
         redirect_to_index_or_attachable(:std => 1)
       else
         flash.discard
-        render :json => file_attachment.attributes
+        render :json => file_attachment.bb_attributes
       end
     end
 
@@ -123,7 +123,7 @@ class FileAttachmentsController < FileShare::ApplicationController
         end
         format.json do
           if success
-            render :json => file_attachment.attributes
+            render :json => file_attachment.bb_attributes
           else
             render :json => {:errors => file_attachment.errors.to_json}
           end
@@ -140,7 +140,7 @@ class FileAttachmentsController < FileShare::ApplicationController
           flash[:notice] = msg
           redirect_to_index_or_attachable
         end
-        format.json{ render :json => @file_attachment.attributes }
+        format.json{ render :json => @file_attachment.bb_attributes }
       end
     end
 end

@@ -31,13 +31,3 @@ form.formtastic fieldset ol li p.inline-hints {
 #event_start_on { width: 50% }
 #event_end_on_input label { width: 49% }
 #event_end_on { width: 50% }
-form.file_attachment {
-  width: 400px;
-}
-form.file_attachment button {
-  float: right;
-}
-form.file_attachment textarea {
-  height: 70px;
-  width: 390px;
-}

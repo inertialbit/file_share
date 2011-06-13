@@ -18,15 +18,19 @@
     </form>
   </script>
   <script type="text/template" id="file-attachment-edit-form-template">
-    <form id="file_attachment_{{ id }}_form" class="file_attachment" action="#file_share/update/{{ id }}">
-      <input type="text" id="file_attachment_name_{{ id }}" name="file_attachment[{{ id }}][name]" value="{{ name }}">
-      <textarea id="file_attachment_description_{{ id }}" name="file_attachment[{{ id }}][description]">{{ description }}</textarea>
+    <form id="file_attachment_{{ id }}_form" class="file_attachment">
+      <select id="file_attachment_container_{{ id }}">
+        <option>Attach to...</option>
+        <%= render :partial => 'file_attachments/file_container_select', :locals => {:selected => ''} %>
+      </select>
+      <input type="text" id="file_attachment_name_{{ id }}" value="{{ name }}">
+      <textarea id="file_attachment_description_{{ id }}">{{ description }}</textarea>
       <button type="submit">Save</button>
       <button type="reset">Cancel</button>
     </form>
   </script>
   <script type="text/template" id="file-attachment-container-template">
-    <p>{{ container }}</p>
+    <p class="attachable">{{ attachable_type }}: {{ attachable_name }}</p>
   </script>
   <script type="text/template" id="file-attachment-name-template">
     <p class="name">
@@ -42,7 +46,7 @@
   <script type="text/javascript">
   $(function() {
     FileShare.init();
-    FileShare.Files.refresh(<%=raw @file_attachments.map(&:attributes).to_json %>);
+    FileShare.Files.refresh(<%=raw @file_attachments.map(&:bb_attributes).to_json %>);
     var uploader = new plupload.Uploader({
   		runtimes : 'html5', // use only html5
   		browse_button : 'uploader-browse',

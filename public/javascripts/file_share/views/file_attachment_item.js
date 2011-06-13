@@ -11,8 +11,8 @@ FileShare.Views.FileAttachment = Backbone.View.extend({
     this.nameTemplate = _.template($('#file-attachment-name-template').html());
     this.descriptionTemplate = _.template($('#file-attachment-description-template').html());
     _.bindAll(this, 'render');
+    
     this.model.bind('change', this.render);
-    //this.bind('render', this.hideButtons);
     this.model.view = this;
   },
   preventDefault: function(activeEvent) {
@@ -32,9 +32,10 @@ FileShare.Views.FileAttachment = Backbone.View.extend({
         id: this.model.get('id')
       }));
     }
-    if( this.model.get('attachable_id') && this.model.get('attachable_type') ) {
+    if( this.model.get('attachable_name') ) {
       compiled.push(this.containerTemplate({
-        container: this.model.get('attachable_type')
+        attachable_name: this.model.get('attachable_name'),
+        attachable_type: this.model.get('attachable_type')
       }));
     }
     if( this.model.get('description') ) {

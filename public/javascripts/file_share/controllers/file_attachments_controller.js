@@ -3,6 +3,9 @@ FileShare.Controllers.FileAttachments = Backbone.Controller.extend({
     "file_share/:id": "edit",
     "file_share/delete/:id": "delete"
   },
+  initialize: function(options) {
+    window.location.hash = '#';
+  },
   edit: function(id) {
     var file = FileShare.Files.get(id);
     if( file ) {
@@ -11,7 +14,7 @@ FileShare.Controllers.FileAttachments = Backbone.Controller.extend({
         id: 'editing_file_attachment_'+id
       });
       $('#file_attachment_'+id).after(view.render().el);
-      $('#file_attachment_'+id).detach();
+      $('#file_attachment_'+id).hide();
     } else {
       var user_msg = new FileShare.Views.UserMessage({
         message: "File not found."
@@ -23,10 +26,11 @@ FileShare.Controllers.FileAttachments = Backbone.Controller.extend({
   update: function(model) {    
     model.save({
       name: $('#file_attachment_name_'+model.get('id')).val(),
-      description: $('#file_attachment_description_'+model.get('id')).val()
+      description: $('#file_attachment_description_'+model.get('id')).val(),
+      file_container: $('#file_attachment_container_'+model.get('id')).val()
     }, {
       success: function(model, response) {
-        FileShare.Files.refresh(model);
+        $('#file_attachment_'+model.get('id')).show();
         $('#editing_file_attachment_'+model.id).remove();
       },
       error: function(model, response) {
@@ -38,6 +42,7 @@ FileShare.Controllers.FileAttachments = Backbone.Controller.extend({
         error_view.render();
       }
     });
+    window.location.hash = '#';
   },
   delete: function(id) {
     var file = FileShare.Files.get(id);
