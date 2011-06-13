@@ -8,6 +8,8 @@
 class FileAttachment < ActiveRecord::Base
   set_table_name "file_share_file_attachments"
   
+  attr_accessible :name, :description, :uploaded_file, :attachable_id, :attachable_type, :file_container
+  
   REL_ROOT_DIR = File.join 'public', 'files'
   ABS_ROOT_DIR = File.join Rails.root, REL_ROOT_DIR
   
@@ -49,11 +51,11 @@ class FileAttachment < ActiveRecord::Base
       trash_folder = File.join ABS_ROOT_DIR, attachable_folder, 'trash'
       ensure_folder_path_exists(trash_folder)
       trash_filename = generate_unique_filename(trash_folder)
-      
+
       FileUtils.mv(full_path, File.join(trash_folder, trash_filename))
-      
+
       unless File.exists?(File.join(trash_folder, trash_filename))
-        raise Errno::ENOENT("The file at #{filepath} should be in the trash but it is not.")
+        raise Errno::ENOENT("The file at #{filepath} should be in the trash but it is not. Database record will be deleted.")
       end
       logger.info("Moved File Attachment to Trash: #{File.join(trash_folder, trash_filename)}")
     end
@@ -66,7 +68,7 @@ class FileAttachment < ActiveRecord::Base
     end
     def generate_unique_filename(dest_path=nil)
       dest_path ||= File.join ABS_ROOT_DIR, attachable_folder
-      base_filename = File.basename(uploaded_file && uploaded_file.original_filename || filepath)
+      base_filename = File.basename(name || uploaded_file && uploaded_file.original_filename || filepath)
       new_filename = base_filename
       path = File.join dest_path, new_filename
       count = 0

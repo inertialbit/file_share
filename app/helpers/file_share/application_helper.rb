@@ -87,22 +87,24 @@ module FileShare
     end
     def file_share_javascript_includes
       list = [
-        "#{file_share_asset_prefix}jquery-ui-1.7.2.custom.min.js",
-        "#{file_share_asset_prefix}jquery.tablesorter.min.js",
-        "#{file_share_asset_prefix}jquery.string.1.0-min.js",
-        "#{file_share_asset_prefix}jquery.clonePosition.js",
-        "#{file_share_asset_prefix}lowpro.jquery.js",
-        "#{file_share_asset_prefix}jquery.qtip-1.0.0-rc3.js",
+        "#{file_share_asset_prefix}vendor/jquery-ui-1.7.2.custom.min.js",
+        "#{file_share_asset_prefix}vendor/underscore.js",
+        "#{file_share_asset_prefix}vendor/backbone.js",
         "#{file_share_asset_prefix}rails",
-        "#{file_share_asset_prefix}file_share_behaviors",
         "#{file_share_asset_prefix}file_share",
-        "http://www.google.com/jsapi",
-        "#{file_share_asset_prefix}plupload/gears_init",
-        "#{file_share_asset_prefix}plupload/plupload.full.min.js",
-        "#{file_share_asset_prefix}plupload/jquery.plupload.queue.min.js"
+        "#{file_share_asset_prefix}vendor/plupload/plupload.full.min.js",
+        "#{file_share_asset_prefix}underscore_config.js",
+        "#{file_share_asset_prefix}models/file_attachment.js",
+        "#{file_share_asset_prefix}models/file_container.js",
+        "#{file_share_asset_prefix}collections/file_attachments.js",
+        "#{file_share_asset_prefix}collections/file_containers.js",
+        "#{file_share_asset_prefix}controllers/file_attachments_controller.js",
+        "#{file_share_asset_prefix}views/user_messages.js",
+        "#{file_share_asset_prefix}views/file_attachment_item.js",
+        "#{file_share_asset_prefix}views/file_attachment_forms.js"
       ]
       unless Rails.env == 'production'
-        list.unshift("#{file_share_asset_prefix}jquery")
+        list.unshift("#{file_share_asset_prefix}vendor/jquery")
       else
         list.unshift("http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js")
       end

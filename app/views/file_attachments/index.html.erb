@@ -1,4 +1,134 @@
-<%= render :partial => 'file_attachments/plupload_with_listing', :locals => {
-  :orphans => @orphans,
-  :files => @files
-} %>
+<%= 
+# original
+#render :partial => 'file_attachments/plupload_with_listing', :locals => {
+#  :orphans => @orphans,
+#  :files => @files
+#}
+%>
+
+<% content_for :javascript do %>
+  <script type="text/template" id="file-share-user-message-template">
+    <p>{{ user_message }}</p>
+  </script>
+  <script type="text/template" id="file-attachment-upload-form-template">
+    <form id="new_file_attachment_{{cid}}" class="file_attachment">
+      <input type="text" id="file_attachment_name_{{cid}}" name="file_attachment[{{cid}}][name]" value="{{name}}">
+      <span class="fake_button">{{ size }}</span>
+      <textarea id="file_attachment_description_{{cid}}" name="file_attachment[{{cid}}][description]">{{description}}</textarea>
+    </form>
+  </script>
+  <script type="text/template" id="file-attachment-edit-form-template">
+    <form id="file_attachment_{{ id }}_form" class="file_attachment" action="#file_share/update/{{ id }}">
+      <input type="text" id="file_attachment_name_{{ id }}" name="file_attachment[{{ id }}][name]" value="{{ name }}">
+      <textarea id="file_attachment_description_{{ id }}" name="file_attachment[{{ id }}][description]">{{ description }}</textarea>
+      <button type="submit">Save</button>
+      <button type="reset">Cancel</button>
+    </form>
+  </script>
+  <script type="text/template" id="file-attachment-container-template">
+    <p>{{ container }}</p>
+  </script>
+  <script type="text/template" id="file-attachment-name-template">
+    <p class="name">
+      <%= link_to '{{ name }}', '/file_attachments/{{ id }}/download' %>
+      
+      <span id="edit_file_attachment_{{ id }}" class="fake_button"><a href="#file_share/{{ id }}">edit</a></span>
+      <span id="delete_file_attachment_{{ id }}" class="fake_button"><a href="#file_share/delete/{{ id }}">delete</a></span>
+    </p>
+  </script>
+  <script type="text/template" id="file-attachment-description-template">
+    <p class="description">{{ description }}</p>
+  </script>
+  <script type="text/javascript">
+  $(function() {
+    FileShare.init();
+    FileShare.Files.refresh(<%=raw @file_attachments.map(&:attributes).to_json %>);
+    var uploader = new plupload.Uploader({
+  		runtimes : 'html5', // use only html5
+  		browse_button : 'uploader-browse',
+  		container : 'uploader',
+  		url : '<%= file_attachments_path %>',
+  		dragdrop: false,
+  		multipart: true,
+  		required_features: 'multipart', // disable uploader if html5+multipart not available - webkit doesn't support html5+multipart
+  		max_file_size : '50mb',
+  		resize : {width : 320, height : 240, quality : 90},
+  		filters : [
+  			{title : "Image files", extensions : "jpg,gif,png,svg"},
+  			{title : "Zip files", extensions : "zip"},
+  			{title : "PDF documents", extensions : "pdf"},
+  			{title : "Word documents", extensions : "doc,docx"},
+  			{title : "Power Point presentations", extensions : "ppt,pptx"},
+  			{title : "Excel spreadsheets", extensions : "xls,xlsx"},
+  			{title : "Plain text files", extensions : "txt"}
+  		]
+    });
+    uploader.bind('UploadFile', function(up, file) {
+      up.settings.multipart_params = {
+        authenticity_token: '<%= form_authenticity_token %>',
+        display_name: $('#file_attachment_name_'+file.id).attr('value'),
+        description: $('#file_attachment_description_'+file.id).attr('value')
+      }
+    });
+    $('#uploader-save').click(function(clickEvent) {
+      clickEvent.preventDefault();
+      if( uploader.files.length > 0 ) {
+        uploader.start();
+      } else {
+        var view = new FileShare.Views.UserMessage({
+          message: "Click 'Browse' to select files before uploading."
+        });
+        view.render();
+      }
+    });
+    uploader.init();
+    $('#uploader-cancel').click(function(clickEvent) {
+      clickEvent.preventDefault();
+      _.each(uploader.files, function(file) {
+        uploader.removeFile(file);
+      });
+      $('#uploader-queue').html('');
+    });
+    uploader.bind('FilesAdded', function(up, files) {
+      $.each(files, function(i, file) {
+        var view = new FileShare.Views.FileAttachmentUploadForm({model: file});
+        $('#uploader-queue').append(view.render().el);
+      });
+    });
+    uploader.bind('FileUploaded', function(up, file, response) {
+      var json = $.parseJSON(response.response);
+      var me = new FileShare.Models.FileAttachment(json);
+      
+      $('#new_file_attachment_'+file.id).remove();
+      FileShare.Files.add(me);
+    });
+  });
+  </script>
+  <%= 
+  # need to add .jst handler to rails... or just use JAMMIT
+  #render :partial => 'file_attachments/file_attachment.jst'
+  %>
+<% end %>
+
+<div id="uploader" class="uploader-buttons">
+  <p>
+    <button id="uploader-browse">Browse</button>
+    <button id="uploader-cancel">Cancel</button>
+    <button id="uploader-save">Upload</button>
+  </p>
+  <div style="clear:both;"></div>
+</div>
+<div class="uploader-progress">
+  <div id="uploader-queue">
+
+  </div>
+</div>
+
+<div id="file_attachments" class="file_attachments">
+</div>
+
+<% if Rails.env.to_s == 'development' %>
+<div id="debug">
+  <h2>JS Debug</h2>
+</div>
+<% end %>

@@ -1,10 +1,12 @@
 <h2>Downloadable Resources</h2>
 <div id="file_attachments">
   <% if orphans.present? && files.present? %>
+  
   <div id="orphans" class="span-8">
     <h2>Orphaned Files</h2>
     <%= render :partial => 'file_attachments/file_attachment', :collection => orphans %>
   </div>
+  
   <div id="files" class="span-8 last">
     <h2>Attached Files</h2>
     <% files.group_by(&:attachable).each do |attachable, attached_files| %>
@@ -15,12 +17,15 @@
     <% end %>
   </div>
   <div style="clear:both;"></div>
+  
   <% else %>
+  
   <div id="files">
     <% if files.present? || orphans.present? %>
     <%= render :partial => 'file_attachments/file_attachment', :collection => files.present? ? files : orphans %>
     <% end %>
   </div>
+  
   <% end %>
 </div>
 

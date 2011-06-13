@@ -3,12 +3,23 @@ class FileAttachmentsController < FileShare::ApplicationController
   # before_filter :load_and_authorize_current_user, :except => [:index, :show, :download]
   
   rescue_from Errno::ENOENT, :with => :file_not_found
+  
+  respond_to :html
+  respond_to :json, :only => [:index, :create, :destroy]
 
   private
     def file_not_found(e)
       logger.error("FileAttachmentsController[#{action_name}] was rescued with :file_not_found. #{e.message}")
-      flash[:warning] = "The physical file could not be located so your request could not be completed."
-      redirect_back_or_default(file_attachments_path)
+      msg = "The physical file could not be located so your request could not be completed."
+      respond_to do |format|
+        format.html do
+          flash[:warning] = msg
+          redirect_back_or_default(file_attachments_path)
+        end
+        format.json do
+          render :status => 511, :text => msg
+        end
+      end
     end
     def redirect_to_index_or_attachable(params={})
       if defined?(@file_attachment)
@@ -37,8 +48,8 @@ class FileAttachmentsController < FileShare::ApplicationController
       @file_attachment = FileAttachment.find(params[:id])
     end
     def index
-      @orphans = FileAttachment.orphans
-      @files   = FileAttachment.attached
+      @file_attachments = FileAttachment.where(1)
+      respond_with @file_attachments
     end
   
     def download
@@ -48,7 +59,7 @@ class FileAttachmentsController < FileShare::ApplicationController
       logger.debug("FILE INFO: #{file_itself.inspect}")
       send_data(file_itself.read, :filename => File.basename(file_itself.path), :stream => true, :buffer_size => 1.megabyte)
     end
-  
+
     def create
       if params[:file] # plupload param
         file_params = {
@@ -60,55 +71,76 @@ class FileAttachmentsController < FileShare::ApplicationController
             :attachable_type => params[:attachable_type]
           })
         end
-        @file_attachment = FileAttachment.new file_params
+        if params[:display_name]
+          file_params.merge!({
+            :name => params[:display_name]
+          })
+        end
+        if params[:description]
+          file_params.merge!({
+            :description => params[:description]
+          })
+        end
+        file_attachment = FileAttachment.new file_params
       elsif params[:file_attachment] && params[:file_attachment][:uploaded_file]
         # std form params
-        @file_attachment = FileAttachment.new params[:file_attachment]
+        file_attachment = FileAttachment.new params[:file_attachment]
       end
-      
-      if @file_attachment && @file_attachment.save
+
+      if file_attachment && file_attachment.save
         flash[:notice] = "File uploaded."
       else
-        if @file_attachment
-          flash[:warning] = "Unable to save file attachment: #{@file_attachment.errors.full_messages.join('; ')}"
+        if file_attachment
+          flash[:warning] = "Unable to save file attachment: #{file_attachment.errors.full_messages.join('; ')}"
         else
           flash[:warning] = "No files were selected for upload."
         end
       end
-      unless params[:file] # request.xhr? # html5 based multiple uploads are not xhr ?
-        redirect_to_index_or_attachable(:std => 1) # {:std => 1} - make sure the std html form displays
+
+      unless params[:file] || request.xhr? # html5 based multiple uploads are not xhr
+        redirect_to_index_or_attachable(:std => 1)
       else
         flash.discard
-        render :partial => 'file_attachments/file_attachment', :object => @file_attachment
+        render :json => file_attachment.attributes
       end
     end
-    
+
     def edit
       @file_attachment = FileAttachment.find(params[:id])
     end
     
     def update
-      @file_attachment = FileAttachment.find(params[:id])
+      file_attachment = FileAttachment.find(params[:id])
+      success = file_attachment.update_attributes params
       respond_to do |format|
-        if @file_attachment.update_attributes(params[:file_attachment])
-          format.html do
-            flash[:notice] = "Updated File: #{@file_attachment.name}"
+        format.html do
+          if success            
+            flash[:notice] = "Updated File: #{file_attachment.name}"
             redirect_to_index_or_attachable
-          end
-        else
-          format.html do
-            flash.now[:warning] = "The description could not be saved, please try again."
+          else
             render :edit
           end
         end
-        format.js
+        format.json do
+          if success
+            render :json => file_attachment.attributes
+          else
+            render :json => {:errors => file_attachment.errors.to_json}
+          end
+        end
       end
     end
     
     def destroy
       @file_attachment = FileAttachment.find(params[:id])
       @file_attachment.destroy
-      flash[:notice] = "Deleted File: #{@file_attachment.name}"
-      redirect_to_index_or_attachable
+      msg = "Deleted File: #{@file_attachment.name}"
+      respond_to do |format|
+        format.html do
+          flash[:notice] = msg
+          redirect_to_index_or_attachable
+        end
+        format.json{ render :json => @file_attachment.attributes }
+      end
     end
 end
