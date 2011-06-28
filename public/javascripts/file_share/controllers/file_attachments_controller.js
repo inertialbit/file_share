@@ -30,7 +30,7 @@ FileShare.Controllers.FileAttachments = Backbone.Controller.extend({
       file_container: $('#file_attachment_container_'+model.get('id')).val()
     }, {
       success: function(model, response) {
-        $('#file_attachment_'+model.get('id')).show();
+        //$('#file_attachment_'+model.get('id')).show();
         $('#editing_file_attachment_'+model.id).remove();
       },
       error: function(model, response) {

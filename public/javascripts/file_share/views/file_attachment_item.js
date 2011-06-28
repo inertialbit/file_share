@@ -52,17 +52,27 @@ FileShare.Views.FileAttachment = Backbone.View.extend({
 FileShare.Views.FileAttachmentList = Backbone.View.extend({
   el: $('#file_attachments'),
   initialize: function() {
-    _.bindAll(this, 'addOne', 'addAll');
+    _.bindAll(this, 'addOne', 'addAll', 'reAdd');
     FileShare.Files.bind('remove', this.removeOne);
     FileShare.Files.bind('refresh', this.addAll);
-    FileShare.Files.bind('add', this.addOne)
+    FileShare.Files.bind('change', this.reAdd);
+    FileShare.Files.bind('add', this.addOne);
   },
-  addOne: function(file) {    
+  reAdd: function(file) {
+    $('#file_attachment_'+file.get('id')).remove();
+    this.addOne(file);
+  },
+  addOne: function(file) {
     var view = new FileShare.Views.FileAttachment({
       model: file,
       id: 'file_attachment_'+file.get('id')
     });
-    $('#file_attachments').append($(view.render().el).effect('highlight'));
+    var i = FileShare.Files.indexOf(file);
+    if( i == 0 ) { // first file uploaded
+      $('#file_attachments').prepend($(view.render().el).effect('highlight'));
+    } else {
+      $($('#file_attachments .file_attachment')[i-1]).after($(view.render().el).effect('highlight'))
+    }
   },
   addAll: function() {
     FileShare.Files.each(this.addOne);
