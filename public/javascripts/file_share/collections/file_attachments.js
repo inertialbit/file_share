@@ -5,6 +5,3 @@ FileShare.Collections.FileAttachments = Backbone.Collection.extend({
     return file.get('name') + ' ' + file.get('updated_at');
   }
 });
-$(function() {
-  FileShare.Files = new FileShare.Collections.FileAttachments();
-});

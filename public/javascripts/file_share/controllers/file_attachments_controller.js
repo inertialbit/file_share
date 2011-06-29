@@ -5,15 +5,25 @@ FileShare.Controllers.FileAttachments = Backbone.Controller.extend({
   },
   initialize: function(options) {
     window.location.hash = '#';
+    FileShare.Files = new FileShare.Collections.FileAttachments();
+  },
+  editFormView: function(file) {
+    if( !this.editForm ) {
+      this.editForm = new FileShare.Views.FileAttachmentEditForm({
+        model: file,
+        id: 'editing_file_attachment_' + file.get('id')
+      });
+    }  
+    return this.editForm;
   },
   edit: function(id) {
     var file = FileShare.Files.get(id);
     if( file ) {
-      var view = new FileShare.Views.FileAttachmentEditForm({
-        model: file,
-        id: 'editing_file_attachment_'+id
-      });
-      $('#file_attachment_'+id).after(view.render().el);
+      // mv render & dom manip to view init
+      // then just call this.editFormView(file)
+      // and update #editFormView to simply instantiate the view
+      // prob don't even need to store the instance anywhere...
+      $('#file_attachment_'+id).after(this.editFormView(file).render().el);
       $('#file_attachment_'+id).hide();
     } else {
       var user_msg = new FileShare.Views.UserMessage({

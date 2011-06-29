@@ -61,6 +61,7 @@ FileShare.Views.FileAttachmentEditForm = Backbone.View.extend({
   render: function() {
     if( this.model ) {
       $(this.el).html(this.template(this.model.toJSON()));
+      
       /*
         ugly but maintains compat for use in apps with lowpro
       */

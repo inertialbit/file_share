@@ -33,6 +33,8 @@ Jeweler::Tasks.new do |gem|
   gem.add_development_dependency "rcov"
   gem.add_development_dependency "rspec-rails"
   gem.add_development_dependency 'sqlite3'
+  gem.add_development_dependency 'jasmine'
+  gem.add_development_dependency 'coffee-script'
 
   # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
 end

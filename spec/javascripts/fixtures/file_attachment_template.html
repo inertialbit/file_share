@@ -1,0 +1,15 @@
+
+<script type="text/template" id="file-attachment-container-template">
+  <p class="attachable">{{ attachable_type }}: {{ attachable_name }}</p>
+</script>
+<script type="text/template" id="file-attachment-name-template">
+  <p class="name">
+    <%= link_to '{{ name }}', '/file_attachments/{{ id }}/download' %>
+    
+    <span id="edit_file_attachment_{{ id }}" class="fake_button"><a href="#file_share/{{ id }}">edit</a></span>
+    <span id="delete_file_attachment_{{ id }}" class="fake_button"><a href="#file_share/delete/{{ id }}">delete</a></span>
+  </p>
+</script>
+<script type="text/template" id="file-attachment-description-template">
+  <p class="description">{{ description }}</p>
+</script>

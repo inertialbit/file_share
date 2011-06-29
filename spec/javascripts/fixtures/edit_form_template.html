@@ -1,0 +1,11 @@
+<script type="text/template" id="file-attachment-edit-form-template">
+  <form id="file_attachment_{{ id }}_form" class="file_attachment">
+    <select id="file_attachment_container_{{ id }}">
+      <option>Attach to...</option>
+    </select>
+    <input type="text" id="file_attachment_name_{{ id }}" value="{{ name }}">
+    <textarea id="file_attachment_description_{{ id }}">{{ description }}</textarea>
+    <button type="submit">Save</button>
+    <button type="reset">Cancel</button>
+  </form>
+</script>
