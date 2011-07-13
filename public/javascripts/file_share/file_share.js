@@ -1,13 +1,28 @@
 FileShare = {
-  Models: {},
-  Views: {},
-  Collections: {},
-  Controllers: {},
+  Models: {
+    FileAttachment: {},
+    FileContainer: {}
+  },
+  Views: {
+    FileAttachment: {},
+    FileList: {}
+  },
+  Collections: {
+    FileAttachments: {},
+    FileContainers: {}
+  },
+  Controllers: {
+    FileAttachments: {}
+  },
   Flash: '',
   init: function() {
+    FileShare.Files = new FileShare.Collections.FileAttachments();
     FileShare.FileAttachmentsController = new FileShare.Controllers.FileAttachments();
     Backbone.history.start();
-    new FileShare.Views.FileAttachmentList();
+    new FileShare.Views.FileList({
+      collection: FileShare.Files,
+      id: 'file_attachments'
+    });
   }
 }
 

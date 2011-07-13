@@ -4,6 +4,7 @@ FileShare.Views.UserMessage = Backbone.View.extend({
   id: 'user-message',
   initialize: function() {
     this.template = _.template($('#file-share-user-message-template').html());
+    this.render();
   },
   render: function() {
     $(this.el).append(this.template({

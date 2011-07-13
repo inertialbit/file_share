@@ -100,7 +100,8 @@ module FileShare
         "#{file_share_asset_prefix}collections/file_containers.js",
         "#{file_share_asset_prefix}controllers/file_attachments_controller.js",
         "#{file_share_asset_prefix}views/user_messages.js",
-        "#{file_share_asset_prefix}views/file_attachment_item.js",
+        "#{file_share_asset_prefix}views/file_attachment.js",
+        "#{file_share_asset_prefix}views/file_list.js",
         "#{file_share_asset_prefix}views/file_attachment_forms.js"
       ]
       unless Rails.env == 'production'

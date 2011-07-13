@@ -18,6 +18,9 @@
     </form>
   </script>
   <script type="text/template" id="file-attachment-edit-form-template">
+    <%= 
+    #render :partial => 'file_attachments/file_attachment_form', :object => @whatever
+     %>
     <form id="file_attachment_{{ id }}_form" class="file_attachment">
       <select id="file_attachment_container_{{ id }}">
         <option>Attach to...</option>
@@ -80,9 +83,8 @@
         uploader.start();
       } else {
         var view = new FileShare.Views.UserMessage({
-          message: "Click 'Browse' to select files before uploading."
+          message: "Click 'Browse' to select files you'd like to upload."
         });
-        view.render();
       }
     });
     uploader.init();

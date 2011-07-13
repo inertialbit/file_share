@@ -5,7 +5,12 @@ FileShare.Controllers.FileAttachments = Backbone.Controller.extend({
   },
   initialize: function(options) {
     window.location.hash = '#';
-    FileShare.Files = new FileShare.Collections.FileAttachments();
+  },
+  userMessageView: function(msg) {
+    this.userMessage = new FileShare.Views.UserMessage({
+      message: msg
+    });
+    return this.userMessage;
   },
   editFormView: function(file) {
     if( !this.editForm ) {
@@ -15,6 +20,24 @@ FileShare.Controllers.FileAttachments = Backbone.Controller.extend({
       });
     }  
     return this.editForm;
+  },
+  formMessageView: function(options) {
+    if( !this.formMessage ) {
+      this.formMessage = new FileShare.Views.FormMessage(options);
+    }
+    return this.formMessage.render();
+  },
+  removeEditFormView: function(file) {
+    return $('#editing_file_attachment_'+file.id).remove();
+  },
+  getFileName: function(model) {
+    return $('#file_attachment_name_'+model.get('id')).val();
+  },
+  getFileDescription: function(model) {
+    return $('#file_attachment_description_'+model.get('id')).val();
+  },
+  getFileContainer: function(model) {
+    return $('#file_attachment_container_'+model.get('id')).val();
   },
   edit: function(id) {
     var file = FileShare.Files.get(id);
@@ -26,61 +49,49 @@ FileShare.Controllers.FileAttachments = Backbone.Controller.extend({
       $('#file_attachment_'+id).after(this.editFormView(file).render().el);
       $('#file_attachment_'+id).hide();
     } else {
-      var user_msg = new FileShare.Views.UserMessage({
-        message: "File not found."
-      });
-      user_msg.render();
+      this.userMessageView("File not found.");
       window.location.hash = '#';
     }
   },
-  update: function(model) {    
+  update: function(model) {
+    var me = this;
     model.save({
-      name: $('#file_attachment_name_'+model.get('id')).val(),
-      description: $('#file_attachment_description_'+model.get('id')).val(),
-      file_container: $('#file_attachment_container_'+model.get('id')).val()
+      name: this.getFileName(model),
+      description: this.getFileDescription(model),
+      file_container: this.getFileContainer(model)
     }, {
       success: function(model, response) {
-        //$('#file_attachment_'+model.get('id')).show();
-        $('#editing_file_attachment_'+model.id).remove();
+        me.removeEditFormView(model);
       },
       error: function(model, response) {
-        var error_view = new FileShare.Views.FormMessage({
+        me.formMessageView({
           className: 'error small_text',
           model: model,
           errors: response.errors
         });
-        error_view.render();
       }
     });
     window.location.hash = '#';
   },
   delete: function(id) {
     var file = FileShare.Files.get(id);
+    var me = this;
     if( file ) {
       var confirmation = confirm("Delete "+file.get('name')+"?");
       if( confirmation ) {
         file.destroy({
           success: function(model, response) {
-            var msg = 'Deleted '+file.get('name')+'.';
-            var usr_msg = new FileShare.Views.UserMessage({
-              message: msg
-            });
-            FileShare.Files.remove(file);
-            usr_msg.render();
+            var msg = 'Deleted '+model.get('name')+'.';
+            FileShare.Files.remove(model);
+            me.userMessageView(msg);
           },
           error: function(model, response) {
-            var usr_msg = new FileShare.Views.UserMessage({
-              message: response.responseText
-            });
-            usr_msg.render();
+            me.userMessageView(response.responseText);
           }
         });
       }
     } else {
-      var user_msg = new FileShare.Views.UserMessage({
-        message: "File not found."
-      });
-      user_msg.render();
+      me.userMessageView('File not found.');
     }
     window.location.hash = '#';
   }
