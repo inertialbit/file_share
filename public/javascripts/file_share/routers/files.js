@@ -1,4 +1,4 @@
-FileShare.Controllers.FileAttachments = Backbone.Controller.extend({
+FileShare.Routers.File = Backbone.Router.extend({
   routes: {
     "file_share/:id": "edit",
     "file_share/delete/:id": "delete"

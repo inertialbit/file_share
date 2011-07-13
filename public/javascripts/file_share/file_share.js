@@ -2,11 +2,11 @@ FileShare = {
   Models: {},
   Views: {},
   Collections: {},
-  Controllers: {},
+  Routers: {},
   Flash: '',
   init: function() {
     FileShare.Files = new FileShare.Collections.Files();
-    FileShare.FileAttachmentsController = new FileShare.Controllers.FileAttachments();
+    FileShare.FileAttachmentsController = new FileShare.Routers.File();
     Backbone.history.start();
     new FileShare.Views.FileList({
       collection: FileShare.Files,

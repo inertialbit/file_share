@@ -22,7 +22,7 @@ src_files:
   - public/javascripts/file_share/file_share.js
   - public/javascripts/file_share/models/**/*.js
   - public/javascripts/file_share/collections/**/*.js
-  - public/javascripts/file_share/controllers/**/*.js
+  - public/javascripts/file_share/routers/**/*.js
   - public/javascripts/file_share/views/**/*.js
 
 # stylesheets

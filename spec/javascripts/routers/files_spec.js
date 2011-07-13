@@ -1,9 +1,9 @@
 var getByIdFromCollection = function(id, spec) {
   spec.expect(spec.collection.get).toHaveBeenCalledWithExactly(id);
 }
-describe("FileShare.Controllers.FileAttachments", function() {
+describe("FileShare.Routers.File", function() {
   beforeEach(function() {
-    this.controller = new FileShare.Controllers.FileAttachments;
+    this.controller = new FileShare.Routers.File;
     this.collection = new Backbone.Collection();
     this.file = new Backbone.Model();
     
@@ -21,7 +21,7 @@ describe("FileShare.Controllers.FileAttachments", function() {
   describe("init & routes", function() {
     it("resets window.location.hash", function() {
       window.location.hash = '#file_share/whatever';
-      new FileShare.Controllers.FileAttachments;
+      new FileShare.Routers.File;
       expect(window.location.hash).toEqual('');
     });
     it("routes file_share/:id to #edit", function() {

@@ -11,7 +11,7 @@ FileShare.Views.FileList = Backbone.View.extend({
     _.bindAll(this, 'addOne', 'addAll', 'update', 'removeOne');
 
     this.collection.bind('remove', this.removeOne);
-    this.collection.bind('refresh', this.addAll);
+    this.collection.bind('reset', this.addAll);
     this.collection.bind('change', this.update);
     this.collection.bind('add', this.addOne);
   },

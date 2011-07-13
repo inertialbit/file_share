@@ -49,7 +49,7 @@
   <script type="text/javascript">
   $(function() {
     FileShare.init();
-    FileShare.Files.refresh(<%=raw @file_attachments.map(&:bb_attributes).to_json %>);
+    FileShare.Files.reset(<%=raw @file_attachments.map(&:bb_attributes).to_json %>);
     var uploader = new plupload.Uploader({
   		runtimes : 'html5', // use only html5
   		browse_button : 'uploader-browse',

@@ -98,7 +98,7 @@ module FileShare
         "#{file_share_asset_prefix}models/container.js",
         "#{file_share_asset_prefix}collections/files.js",
         "#{file_share_asset_prefix}collections/containers.js",
-        "#{file_share_asset_prefix}controllers/file_attachments_controller.js",
+        "#{file_share_asset_prefix}routers/files.js",
         "#{file_share_asset_prefix}views/user_message.js",
         "#{file_share_asset_prefix}views/form_message.js",
         "#{file_share_asset_prefix}views/file.js",
