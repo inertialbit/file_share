@@ -1,4 +1,4 @@
-FileShare.Views.FileAttachment = Backbone.View.extend({
+FileShare.Views.File = Backbone.View.extend({
   tagName: 'div',
   className: 'file_attachment',
   template_ids: {
@@ -25,7 +25,7 @@ FileShare.Views.FileAttachment = Backbone.View.extend({
     this.model.bind('change', this.render);
     this.model.view = this;
     
-    return this.render();
+    this.render();
   },
   hideButtons: function() {
     this.$('.fake_button').hide();

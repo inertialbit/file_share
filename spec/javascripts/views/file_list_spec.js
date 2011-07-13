@@ -97,14 +97,17 @@ describe("FileShare.Views.FileList", function() {
   });
   describe("fileView file", function() {
     beforeEach(function() {
-      this.fileView = sinon.mock(Backbone, 'View');
-      this.fileViewStub = sinon.stub(FileShare.Views, 'FileAttachment')
+      this.fileView = new Backbone.View();//sinon.mock(Backbone, 'View');
+      this.fileViewStub = sinon.stub(FileShare.Views, 'File')
         .returns(this.fileView);
       this.view = new FileShare.Views.FileList({
         collection: this.collection
       });
     });
-    it("instantiates a new FileShare.Views.FileAttachment with a model of file and an id of 'file_attachment_'+model.id", function() {
+    afterEach(function() {
+      this.fileViewStub.restore();
+    });
+    it("instantiates a new FileShare.Views.File with a model of file and an id of 'file_attachment_'+model.id", function() {
       this.view.fileView(this.file1);
       expect(this.fileViewStub).toHaveBeenCalledWithExactly({
         model: this.file1,

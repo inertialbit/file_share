@@ -1,23 +1,3 @@
-FileShare.Views.FormMessage = Backbone.View.extend({
-  className: 'notice',
-  tagName: 'p',
-  errors: {},
-  initialize: function() {
-    if( this.options.errors ) {
-      this.errors = $.parseJSON(this.options.errors);
-    } else {
-      this.errors = {};
-    }
-  },
-  render: function() {
-    _.each(this.errors, function(errMsg, fieldName) {
-      $(this.el).html(errMsg+'');
-      $('#file_attachment_'+fieldName+'_'+this.model.get('id')).after($(this.el));
-    }, this);
-    return this;
-  }
-});
-
 FileShare.Views.FileAttachmentUploadForm = Backbone.View.extend({
   className: "file-attachment-fields",
   initialize: function() {
@@ -35,7 +15,7 @@ FileShare.Views.FileAttachmentUploadForm = Backbone.View.extend({
   }
 });
 
-FileShare.Views.FileAttachmentEditForm = Backbone.View.extend({
+FileShare.Views.FileEditForm = Backbone.View.extend({
   className: "file-attachment-fields",
   /* for when we don't need to support lowpro
   events: {
@@ -45,6 +25,7 @@ FileShare.Views.FileAttachmentEditForm = Backbone.View.extend({
   */
   initialize: function() {
     this.template = _.template($('#file-attachment-edit-form-template').html());
+    this.render();
   },
   update: function(submitEvent) {
     submitEvent.preventDefault();

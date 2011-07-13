@@ -1,4 +1,4 @@
-describe("FileShare.Views.FileAttachment", function() {
+describe("FileShare.Views.File", function() {
   beforeEach(function() {
     loadFixtures('file_attachment_template.html');
     this.file = new Backbone.Model({
@@ -8,7 +8,7 @@ describe("FileShare.Views.FileAttachment", function() {
       attachable_name: 'MyFolder',
       attachable_type: 'Folder'
     });
-    this.view = new FileShare.Views.FileAttachment({
+    this.view = new FileShare.Views.File({
       id: 'file-attachment-fixture',
       model: this.file
     });
@@ -96,7 +96,7 @@ describe("FileShare.Views.FileAttachment", function() {
       $('body').append('<script type="text/template" id="test-container"><h1>{{ attachable_type }}::{{ attachable_name }}</h1></script>');
       $('body').append('<script type="text/template" id="test-name"><p>{{ name }}</p></script>');
       $('body').append('<script type="text/template" id="test-description"><pre>{{ description }}</pre></script>');
-      var view = new FileShare.Views.FileAttachment({
+      var view = new FileShare.Views.File({
         id: 'test-file-attachment',
         model: this.file,
         template_ids: {

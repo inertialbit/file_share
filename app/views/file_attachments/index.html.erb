@@ -103,7 +103,7 @@
     });
     uploader.bind('FileUploaded', function(up, file, response) {
       var json = $.parseJSON(response.response);
-      var me = new FileShare.Models.FileAttachment(json);
+      var me = new FileShare.Models.File(json);
       
       $('#new_file_attachment_'+file.id).remove();
       FileShare.Files.add(me);

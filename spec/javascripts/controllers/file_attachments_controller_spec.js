@@ -55,6 +55,12 @@ describe("FileShare.Controllers.FileAttachments", function() {
       });
     });
   });
+  describe("#editFormView file", function() {
+    beforeEach(function() {
+      sinon.stub(FileShare.Views, 'FileEditForm')
+        .returns(new Ba);
+    });
+  });
   describe("#update file", function() {
     it("saves the file", function() {
       sinon.stub(this.file, 'save');

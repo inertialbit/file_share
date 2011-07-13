@@ -7,25 +7,18 @@ FileShare.Controllers.FileAttachments = Backbone.Controller.extend({
     window.location.hash = '#';
   },
   userMessageView: function(msg) {
-    this.userMessage = new FileShare.Views.UserMessage({
+    return new FileShare.Views.UserMessage({
       message: msg
     });
-    return this.userMessage;
   },
   editFormView: function(file) {
-    if( !this.editForm ) {
-      this.editForm = new FileShare.Views.FileAttachmentEditForm({
-        model: file,
-        id: 'editing_file_attachment_' + file.get('id')
-      });
-    }  
-    return this.editForm;
+    return new FileShare.Views.FileEditForm({
+      model: file,
+      id: 'editing_file_attachment_' + file.get('id')
+    });
   },
   formMessageView: function(options) {
-    if( !this.formMessage ) {
-      this.formMessage = new FileShare.Views.FormMessage(options);
-    }
-    return this.formMessage.render();
+    return new FileShare.Views.FormMessage(options);
   },
   removeEditFormView: function(file) {
     return $('#editing_file_attachment_'+file.id).remove();
@@ -42,11 +35,7 @@ FileShare.Controllers.FileAttachments = Backbone.Controller.extend({
   edit: function(id) {
     var file = FileShare.Files.get(id);
     if( file ) {
-      // mv render & dom manip to view init
-      // then just call this.editFormView(file)
-      // and update #editFormView to simply instantiate the view
-      // prob don't even need to store the instance anywhere...
-      $('#file_attachment_'+id).after(this.editFormView(file).render().el);
+      $('#file_attachment_'+id).after(this.editFormView(file).el);
       $('#file_attachment_'+id).hide();
     } else {
       this.userMessageView("File not found.");

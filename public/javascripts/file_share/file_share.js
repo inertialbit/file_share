@@ -1,28 +1,24 @@
 FileShare = {
-  Models: {
-    FileAttachment: {},
-    FileContainer: {}
-  },
-  Views: {
-    FileAttachment: {},
-    FileList: {}
-  },
-  Collections: {
-    FileAttachments: {},
-    FileContainers: {}
-  },
-  Controllers: {
-    FileAttachments: {}
-  },
+  Models: {},
+  Views: {},
+  Collections: {},
+  Controllers: {},
   Flash: '',
   init: function() {
-    FileShare.Files = new FileShare.Collections.FileAttachments();
+    FileShare.Files = new FileShare.Collections.Files();
     FileShare.FileAttachmentsController = new FileShare.Controllers.FileAttachments();
     Backbone.history.start();
     new FileShare.Views.FileList({
       collection: FileShare.Files,
       id: 'file_attachments'
     });
+  }
+}
+
+FileShare.Effects = {
+  messageFade: function(selector) {
+    var hide = function() { $(selector).fadeOut(); }
+    _.delay(hide, 3000);
   }
 }
 

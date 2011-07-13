@@ -1,6 +1,6 @@
-describe("FileShare.Collections.FileAttachments", function() {
+describe("FileShare.Collections.Files", function() {
   beforeEach(function() {
-    subject = new FileShare.Collections.FileAttachments;
+    subject = new FileShare.Collections.Files;
     fake_file = {
       get: function(what) {
         var stuff = {
@@ -12,7 +12,7 @@ describe("FileShare.Collections.FileAttachments", function() {
     };
   });
   it("is a collection of FileAttachment models", function() {
-    expect(subject.model).toEqual(FileShare.Models.FileAttachment);
+    expect(subject.model).toEqual(FileShare.Models.File);
   });
   it("has a uri of /file_attachments", function() {
     expect(subject.url).toEqual("/file_attachments");

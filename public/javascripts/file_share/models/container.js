@@ -1,4 +1,4 @@
-FileShare.Models.FileContainer = Backbone.Model.extend({});
+FileShare.Models.Container = Backbone.Model.extend({});
 /*
 $(function(){
   

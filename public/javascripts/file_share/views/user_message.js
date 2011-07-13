@@ -10,13 +10,12 @@ FileShare.Views.UserMessage = Backbone.View.extend({
     $(this.el).append(this.template({
       user_message: this.options.message
     }));
-    if( $('#user-message')[0] ) {
+    if( $('#user-message')[0] != undefined ) {
       $('#user-message').replaceWith($(this.el));
     } else {
       $('#file_attachments').parent().prepend($(this.el));
     }  
-    var hide = function() { $('#user-message').fadeOut(); }
-    _.delay(hide, 3000);
+    FileShare.Effects.messageFade('#user-message');
     return this;
   }
 });

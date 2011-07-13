@@ -1,7 +1,7 @@
 FileShare.Views.FileList = Backbone.View.extend({
   className: 'file_attachments',
   id: 'fs_file_list',
-//  itemView: FileShare.Views.FileAttachment,
+//  itemView: FileShare.Views.File,
   
   initialize: function() {
     if( this.domHasEl() ) {
@@ -35,7 +35,7 @@ FileShare.Views.FileList = Backbone.View.extend({
     }
   },
   fileView: function(file) {
-    new FileShare.Views.FileAttachment({
+    new FileShare.Views.File({
       model: file,
       id: 'file_attachment_'+file.get('id')
     });
